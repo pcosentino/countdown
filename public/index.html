@@ -1,239 +1,161 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-  <head>
-    <title>Ruby on Rails: Welcome aboard</title>
-    <style type="text/css" media="screen">
-      body {
-        margin: 0;
-        margin-bottom: 25px;
-        padding: 0;
-        background-color: #f0f0f0;
-        font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
-        font-size: 13px;
-        color: #333;
-      }
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-      h1 {
-        font-size: 28px;
-        color: #000;
-      }
+<head>
+<title>The Countdown Continues</title>
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css"/>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript"> 
+//######################################################################################
+// Author: ricocheting.com
+// Version: v2.0
+// Date: 2011-03-31
+// Description: displays the amount of time until the "dateFuture" entered below.
 
-      a  {color: #03c}
-      a:hover {
-        background-color: #03c;
-        color: white;
-        text-decoration: none;
-      }
+// NOTE: the month entered must be one less than current month. ie; 0=January, 11=December
+// NOTE: the hour is in 24 hour format. 0=12am, 15=3pm etc
+// format: dateFuture1 = new Date(year,month-1,day,hour,min,sec)
+// example: dateFuture1 = new Date(2003,03,26,14,15,00) = April 26, 2003 - 2:15:00 pm
+
+dateFuture1 = new Date(2012,4,20,0,0,0);
+
+// TESTING: comment out the line below to print out the "dateFuture" for testing purposes
+//document.write(dateFuture +"<br />");
 
 
-      #page {
-        background-color: #f0f0f0;
-        width: 750px;
-        margin: 0;
-        margin-left: auto;
-        margin-right: auto;
-      }
+//###################################
+//nothing beyond this point
+function GetCount(ddate,iid){
 
-      #content {
-        float: left;
-        background-color: white;
-        border: 3px solid #aaa;
-        border-top: none;
-        padding: 25px;
-        width: 500px;
-      }
+	dateNow = new Date();	//grab current date
+	amount = ddate.getTime() - dateNow.getTime();	//calc milliseconds between dates
+	delete dateNow;
 
-      #sidebar {
-        float: right;
-        width: 175px;
-      }
+	// if time is already past
+	if(amount < 0){
+		document.getElementById(iid).innerHTML="Today Bitches";
+	}
+	// else date is still good
+	else{
+		weeks=0;days=0;hours=0;mins=0;secs=0;out="";
 
-      #footer {
-        clear: both;
-      }
+		amount = Math.floor(amount/1000);//kill the "milliseconds" so just secs
 
+		weeks=Math.floor(amount/604800);//weeks
+		amount=amount%604800;
 
-      #header, #about, #getting-started {
-        padding-left: 75px;
-        padding-right: 30px;
-      }
+		days=Math.floor(amount/86400);//days
+		amount=amount%86400;
 
+		hours=Math.floor(amount/3600);//hours
+		amount=amount%3600;
 
-      #header {
-        background-image: url("images/rails.png");
-        background-repeat: no-repeat;
-        background-position: top left;
-        height: 64px;
-      }
-      #header h1, #header h2 {margin: 0}
-      #header h2 {
-        color: #888;
-        font-weight: normal;
-        font-size: 16px;
-      }
+		mins=Math.floor(amount/60);//minutes
+		amount=amount%60;
 
+		secs=Math.floor(amount);//seconds
 
-      #about h3 {
-        margin: 0;
-        margin-bottom: 10px;
-        font-size: 14px;
-      }
+		
+    if(weeks != 0){out += (weeks<=9?'0':'')+weeks +" "+((weeks==1)?"week...":"weeks...")+"";}
+		if(days != 0){out += days +" "+((days==1)?"day...":"days...")+"<br>";}
+		if(hours != 0){out += hours +" "+((hours==1)?"hour...":"hours...")+"";}
+		out += mins +" "+((mins==1)?"min...":"mins...")+"<br>";
+		out += secs +" "+((secs==1)?"sec...":"secs...")+"<br>";
+		out = out.substr(0,out.length-2);
+		document.getElementById(iid).innerHTML=out;
 
-      #about-content {
-        background-color: #ffd;
-        border: 1px solid #fc0;
-        margin-left: -55px;
-        margin-right: -10px;
-      }
-      #about-content table {
-        margin-top: 10px;
-        margin-bottom: 10px;
-        font-size: 11px;
-        border-collapse: collapse;
-      }
-      #about-content td {
-        padding: 10px;
-        padding-top: 3px;
-        padding-bottom: 3px;
-      }
-      #about-content td.name  {color: #555}
-      #about-content td.value {color: #000}
+		setTimeout(function(){GetCount(ddate,iid)}, 1000);
+	}
+}
 
-      #about-content ul {
-        padding: 0;
-        list-style-type: none;
-      }
-
-      #about-content.failure {
-        background-color: #fcc;
-        border: 1px solid #f00;
-      }
-      #about-content.failure p {
-        margin: 0;
-        padding: 10px;
-      }
+window.onload=function(){
+	GetCount(dateFuture1, 'countbox1');
+	//you can add additional countdowns here (just make sure you create dateFuture2 and countbox2 etc for each)
+};
 
 
-      #getting-started {
-        border-top: 1px solid #ccc;
-        margin-top: 25px;
-        padding-top: 15px;
-      }
-      #getting-started h1 {
-        margin: 0;
-        font-size: 20px;
-      }
-      #getting-started h2 {
-        margin: 0;
-        font-size: 14px;
-        font-weight: normal;
-        color: #333;
-        margin-bottom: 25px;
-      }
-      #getting-started ol {
-        margin-left: 0;
-        padding-left: 0;
-      }
-      #getting-started li {
-        font-size: 18px;
-        color: #888;
-        margin-bottom: 25px;
-      }
-      #getting-started li h2 {
-        margin: 0;
-        font-weight: normal;
-        font-size: 18px;
-        color: #333;
-      }
-      #getting-started li p {
-        color: #555;
-        font-size: 13px;
-      }
+$( document ).ready( function() {
+            var $body = $('body'); //Cache this for performance
+
+            var setBodyScale = function() {
+                var scaleSource = $body.width(),
+                    scaleFactor = 0.35,                     
+                    maxScale = 300,
+                    minScale = 30; //Tweak these values to taste
+
+                var fontSize = scaleSource * scaleFactor; //Multiply the width of the body by the scaling factor:
+
+                if (fontSize > maxScale) fontSize = maxScale;
+                if (fontSize < minScale) fontSize = minScale; //Enforce the minimum and maximums
+
+                $('body').css('font-size', fontSize + '%');
+            }
+
+            $(window).resize(function(){
+                setBodyScale();
+            });
+
+            //Fire it when the page first loads:
+            setBodyScale();
+        });
+
+</script>
+
+<style type="text/css" >
+img {
+max-width: 100%; 
+max-height: 100%;
+width: auto;
+height: auto; 
+position:absolute;
+top:0;
+}
 
 
-      #sidebar ul {
-        margin-left: 0;
-        padding-left: 0;
-      }
-      #sidebar ul h3 {
-        margin-top: 25px;
-        font-size: 16px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #ccc;
-      }
-      #sidebar li {
-        list-style-type: none;
-      }
-      #sidebar ul.links li {
-        margin-bottom: 5px;
-      }
+p {
+	font-family:arial, sans-serif;
+	font-size:1em;
+	color:white;
+	font-weight:bold;
+	text-align:center;
+}
 
-    </style>
-    <script type="text/javascript">
-      function about() {
-        info = document.getElementById('about-content');
-        if (window.XMLHttpRequest)
-          { xhr = new XMLHttpRequest(); }
-        else
-          { xhr = new ActiveXObject("Microsoft.XMLHTTP"); }
-        xhr.open("GET","rails/info/properties",false);
-        xhr.send("");
-        info.innerHTML = xhr.responseText;
-        info.style.display = 'block'
-      }
-    </script>
-  </head>
-  <body>
-    <div id="page">
-      <div id="sidebar">
-        <ul id="sidebar-items">
-          <li>
-            <h3>Browse the documentation</h3>
-            <ul class="links">
-              <li><a href="http://api.rubyonrails.org/">Rails API</a></li>
-              <li><a href="http://stdlib.rubyonrails.org/">Ruby standard library</a></li>
-              <li><a href="http://corelib.rubyonrails.org/">Ruby core</a></li>
-              <li><a href="http://guides.rubyonrails.org/">Rails Guides</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
+#countbox1{
+font:1em Arial;
+color:white;
+font-weight:bold;
+text-align:center;
+}
 
-      <div id="content">
-        <div id="header">
-          <h1>Welcome aboard</h1>
-          <h2>You&rsquo;re riding Ruby on Rails!</h2>
-        </div>
+#meat{
+	
+	margin:6% auto;
+	position:relative;
+	width:50%;
+	z-index:500;
+	/*border:1px black solid;*/
+	width:95%;
+}
 
-        <div id="about">
-          <h3><a href="rails/info/properties" onclick="about(); return false">About your application&rsquo;s environment</a></h3>
-          <div id="about-content" style="display: none"></div>
-        </div>
+html{
+	background-color:<img src="/images/dock.png" ></img>;
+	
+}
+</style>
 
-        <div id="getting-started">
-          <h1>Getting started</h1>
-          <h2>Here&rsquo;s how to get rolling:</h2>
+</head>
 
-          <ol>
-            <li>
-              <h2>Use <code>rails generate</code> to create your models and controllers</h2>
-              <p>To see all available options, run it without parameters.</p>
-            </li>
+<body>
 
-            <li>
-              <h2>Set up a default route and remove or rename this file</h2>
-              <p>Routes are set up in config/routes.rb.</p>
-            </li>
 
-            <li>
-              <h2>Create your database</h2>
-              <p>Run <code>rake db:migrate</code> to create your database. If you're not using SQLite (the default), edit <code>config/database.yml</code> with your username and password.</p>
-            </li>
-          </ol>
-        </div>
-      </div>
+	
+	<div id="meat">	
+			<p>The Countdown Countinues...</p>
+			<div id="countbox1"></div>
+			<p>Until <span style="color:green;">Mex</span>ico<span style="color:red;">!!!</span></p>
+	</div>
+	<img src="/images/dock.png" ></img>
+</body>
 
-      <div id="footer">&nbsp;</div>
-    </div>
-  </body>
 </html>
