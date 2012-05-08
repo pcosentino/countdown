@@ -50,3 +50,10 @@ html{
 	
 	background-color:#F2FFFF;
 }
+
+#wx_module_9005{
+	float:right;
+	position:relative;
+	z-index:502;
+	margin:5%;
+}
