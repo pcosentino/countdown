@@ -17,9 +17,9 @@ body {
 	
 }
 
-#center{
+/*#center{
 	text-align:center;
-}
+}*/
 
 #countbox1{
 font-family:arial, sans-serif;
@@ -32,15 +32,16 @@ text-align:center;
 	font-size:1.3em;
 	margin:6% auto;
 	position:relative;
-	width:50%;
+	/*width:50%;*/
 	z-index:500;
 	/*border:1px black solid;*/
 	width:95%;
+	text-align:center;
 }
 
 #checklist{
 	font-size:.8em;
-	margin:10% 5%;
+	margin:6% 0% 0% 5%;
 	float:left;
 	position:relative;
 	z-index:501;
@@ -55,5 +56,5 @@ html{
 	float:right;
 	position:relative;
 	z-index:502;
-	margin:10% 5%;
+	margin:6% 5% 0% 0%;
 }
